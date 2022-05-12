@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/",status_code=200)
 def root():
-    return {"message": "Hello World"}
+    return {"start": "1970-01-01"}

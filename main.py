@@ -10,16 +10,16 @@ event={}
 
 class Item(BaseModel):
     date: str
-    event_name: str
+    event: str
 
 class Event():
-    def __init__(self, id, date, event_name, date_added):
+    def __init__(self, id, date, name, date_added):
         self.id = id
         self.date= date
-        self.event_name = event_name
+        self.name = name
         self.date_added = date_added
     def __str__(self):
-        return "{'id': " + str(self.id)+",\n'event': " + str(self.event_name)+ ",\n'date': " +str(self.date) +",\n'date_added': " + str(self.date_added)+"}"
+        return "{'id': " + str(self.id)+",\n'name': " + str(self.name)+ ",\n'date': " +str(self.date) +",\n'date_added': " + str(self.date_added)+"}"
 
 
 @app.get("/",status_code=200)
@@ -63,7 +63,7 @@ def read_item(name: str, number: int, response: Response):
 
 @app.put("/event",status_code=200)
 async def add_new_event(item: Item):
-    current_event = Event(app.counter, item.date, item.event_name, datetime.today().strftime('%Y-%m-%d'))
+    current_event = Event(app.counter, item.date, item.event, datetime.today().strftime('%Y-%m-%d'))
     if item.date in event:
         event[item.date].append(current_event)
     else:

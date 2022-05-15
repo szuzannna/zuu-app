@@ -76,7 +76,7 @@ async def event_on_date(date: str, response: Response):
         return {'id': event[date].id,
                 'event': event[date].event_name,
                 'date': event[date].date,
-                'date_added': event[date]date_added}
+                'date_added': event[date].date_added}
 
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST

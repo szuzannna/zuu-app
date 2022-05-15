@@ -80,12 +80,5 @@ async def event_on_date(date: str, response: Response):
 
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST
-    else:
-        if date in event['date']:
-            return {'id': app.counter,
-            'event': item.event_name,
-            'date': item.date,
-            'date_added': datetime.today().strftime('%Y-%m-%d')}
-        else:
-            response.status_code = status.HTTP_404_NOT_FOUND
+
     return response.status_code

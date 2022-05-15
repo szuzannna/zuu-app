@@ -82,6 +82,6 @@ async def event_on_date(date: str, response: Response):
         if date in event:
             return event[date]
         else:
-            response.status_code = status.HTTP_400_BAD_REQUEST
+            response.status_code = status.HTTP_404_NOT_FOUND
     return response.status_code
 

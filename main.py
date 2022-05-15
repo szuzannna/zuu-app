@@ -18,7 +18,8 @@ class Event():
         self.date= date
         self.event_name = event_name
         self.date_added = date_added
-
+    def __str__(self):
+        return "{'id': " + str(self.id)+",\n'event': " + str(self.event_name)+ ",\n'date': " +str(self.date) +",\n'date_added': " + str(self.date_added)+"}"
 
 
 @app.get("/",status_code=200)
@@ -60,25 +61,31 @@ def read_item(name: str, number: int, response: Response):
         response.status_code = status.HTTP_400_BAD_REQUEST
     return response.status_code
 
-@app.put("/event/{date}",status_code=200)
+@app.put("/event",status_code=201)
 async def add_new_event(item: Item):
     event[item.date] = Event(app.counter, item.date, item.event_name, datetime.today().strftime('%Y-%m-%d'))
 
     app.counter += 1
 
-    return {'id': app.counter,
-            'event': item.event_name,
-            'date': item.date,
-            'date_added': datetime.today().strftime('%Y-%m-%d')}
+    return event[item.date]
 
 
-@app.get("/events/{date}",status_code=200)
+@app.get("/events/{date}", status_code=200)
 async def event_on_date(date: str, response: Response):
-    if type(date) != str:
+    if date in event:
+        return {'id': event[date].id,
+                'event': event[date].event_name,
+                'date': event[date].date,
+                'date_added': event[date]date_added}
+
+    else:
         response.status_code = status.HTTP_400_BAD_REQUEST
     else:
         if date in event['date']:
-            return event
+            return {'id': app.counter,
+            'event': item.event_name,
+            'date': item.date,
+            'date_added': datetime.today().strftime('%Y-%m-%d')}
         else:
             response.status_code = status.HTTP_404_NOT_FOUND
     return response.status_code

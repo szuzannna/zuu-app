@@ -1,9 +1,25 @@
 from fastapi import FastAPI
 from fastapi import status
 from fastapi import Response
+from fastapi import BaseModel
+from datetime import datetime
 
-event={}
 app = FastAPI()
+app.counter = 0
+event={}
+
+class Item(BaseModel):
+    date: str
+    event_name: str
+
+class Event():
+    def __init__(self, id, date, event_name, date_added):
+        self.id = id
+        self.date= date
+        self.event_name = event_name
+        self.date_added = date_added
+
+
 
 @app.get("/",status_code=200)
 def root():
@@ -44,7 +60,19 @@ def read_item(name: str, number: int, response: Response):
         response.status_code = status.HTTP_400_BAD_REQUEST
     return response.status_code
 
-@app.get("/event/{date}",status_code=200)
+@app.put("/event/{date}",status_code=200)
+async def add_new_event(item: Item):
+    event[item.date] = Event(app.counter, item.date, item.event_name, datetime.today().strftime('%Y-%m-%d'))
+
+    app.counter += 1
+
+    return {'id': app.counter,
+            'event': item.event_name,
+            'date': item.date,
+            'date_added': datetime.today().strftime('%Y-%m-%d')}
+
+
+@app.get("/events/{date}",status_code=200)
 async def event_on_date(date: str, response: Response):
     if type(date) != str:
         response.status_code = status.HTTP_400_BAD_REQUEST

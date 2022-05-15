@@ -61,7 +61,7 @@ def read_item(name: str, number: int, response: Response):
         response.status_code = status.HTTP_400_BAD_REQUEST
     return response.status_code
 
-@app.put("/event",status_code=200)
+@app.put("/events",status_code=200)
 async def add_new_event(item: Item):
     current_event = Event(app.counter, item.date, item.event, datetime.today().strftime('%Y-%m-%d'))
     if item.date in event:

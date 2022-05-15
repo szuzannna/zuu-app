@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi import status
 from fastapi import Response
-from fastapi import BaseModel
+from pydantic import BaseModel
 from datetime import datetime
 
 app = FastAPI()

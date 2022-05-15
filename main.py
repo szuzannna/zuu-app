@@ -61,22 +61,23 @@ def read_item(name: str, number: int, response: Response):
         response.status_code = status.HTTP_400_BAD_REQUEST
     return response.status_code
 
-@app.put("/event",status_code=201)
+@app.put("/event",status_code=200)
 async def add_new_event(item: Item):
-    event[item.date] = Event(app.counter, item.date, item.event_name, datetime.today().strftime('%Y-%m-%d'))
+    current_event = Event(app.counter, item.date, item.event_name, datetime.today().strftime('%Y-%m-%d'))
+    if item.date in event:
+        event[item.date].append(current_event)
+    else:
+        event[item.date] = [current_event]
 
     app.counter += 1
 
-    return event[item.date]
+    return current_event
 
 
 @app.get("/events/{date}", status_code=200)
 async def event_on_date(date: str, response: Response):
     if date in event:
-        return {'id': event[date].id,
-                'event': event[date].event_name,
-                'date': event[date].date,
-                'date_added': event[date].date_added}
+        return event[date]
 
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST

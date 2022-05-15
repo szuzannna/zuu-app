@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi import status
 from fastapi import Response
-import asyncio
 
+event={}
 app = FastAPI()
 
 @app.get("/",status_code=200)
@@ -42,4 +42,15 @@ def read_item(name: str, number: int, response: Response):
         response.status_code = status.HTTP_400_BAD_REQUEST
     elif day_dictionary[name.lower()] != number:
         response.status_code = status.HTTP_400_BAD_REQUEST
+    return response.status_code
+
+@app.get("/event/{date}",status_code=200)
+async def event_on_date(date: str, response: Response):
+    if type(date) != str:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+    else:
+        if date in event['date']:
+            return event
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
     return response.status_code
